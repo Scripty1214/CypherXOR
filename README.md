@@ -5,7 +5,7 @@
 
 
 ## Example
-**Encrypt a message** : `python3 main.py -c -m 'Hello world !'`
+**Encrypt a message** : `python3 main.py -c -m 'Hello world !'`\n
 **Decrypt a message** : `python3 main.py -d -m 'RXNzY2kmcm11Y3M9Jnh8Bg==' -i "fzghavmsbdrztvpo" -k "klxggphqekegsexj"`
 
 ## Usage
