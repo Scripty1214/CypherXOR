@@ -1,8 +1,14 @@
 # CypherXOR project (Careful now, I know exactly where you are)
 
-## Programme de chiffrement et déchiffrement XOR.
+## Installation
+**Clone the repo** : `git clone https://github.com/Scripty1214/CypherXOR.git`
 
 
+## Example
+**Encrypt a message** : `python3 main.py -c -m 'Hello world !'`
+**Decrypt a message** : `python3 main.py -d -m 'RXNzY2kmcm11Y3M9Jnh8Bg==' -i "fzghavmsbdrztvpo" -k "klxggphqekegsexj"`
+
+## Usage
 
 usage: main.py [-h] [-c] [-d] [-k KEY] [-i IV] [-f FILE] [-m MESSAGE] [-o OUTPUT]
 
