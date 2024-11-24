@@ -1,4 +1,4 @@
-# CypherXOR project (Carreful now, I know exactly were you are)
+# CypherXOR project (Careful now, I know exactly where you are)
 
 ## Programme de chiffrement et déchiffrement XOR.
 
