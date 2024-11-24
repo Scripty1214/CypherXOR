@@ -1,0 +1,167 @@
+Projet crypto:
+
+
+Créer deux fichiers Python:
+
+- Chiffrement
+- Déchiffrement
+
+
+Chiffrer en utilisant du CBC
+Interdiction d'utiliser des librairies de Crypto
+Algo de chiffrement: XOR
+
+Le programme doit pouvoir chiffrer des fichiers aussi.
+
+
+
+Message utilisateur / fichier utilisateur -> Commande de chiffrement ->python chiffrement.py -c <message_à_chiffrer> -k <secret_key> -> chiffrement du message -> message chiffré
+
+Détection du message chiffré -> commande de déchiffrement -> python dechiffrement.py -d <message_à_dechiffrer> -k <secret_key_utilisée_pour_le_chiffrement> -> déchiffrement du message chiffré -> message déchiffré
+
+
+
+
+Trucs à ajouter:
+
+	- secret_key : Longueur maximale de xx caractères
+	- Essayer de faire un fichier pour faire toutes les commandes
+	- secret_key -> utilisée pour chiffrer le message et donc utilisée pour le déchiffrer
+	- rajouter les chiffres, et lettres majuscules dans ma secret_key
+
+
+
+
+
+Commandes:
+
+	-h : Help menu
+	
+	-c <message_à_chiffrer> : Chiffrer un message, ne peut pas etre utilisé en meme temps que -d, renvoi le message / fichier chiffré avec l'IV initial et la secret_key qui est generée automatiquement
+	
+	-d <message_à_dechiffrer> : Déchiffrer un message chiffré, ne peut pas etre utilisé en meme temps que -c
+
+	-k <secret_key> : Clée secrète utilisée uniquement pour dechiffrer le message, est requis uniquement pour le dechiffrement
+
+	-i <Vecteur_Inital>: iv, vecteur initial utilisée uniquement pour dechiffrer le message, est requis uniquement pour le dechiffrement
+	
+	-f <filename> : choisir un fichier à chiffrer ou dechiffrer, ne peut pas etre utilisé en meme temps que -m
+
+	-m <message> : choisir une chaine de caractères à chiffrer ou dechiffrer, ne peut pas etre utilisé en meme temps que -f
+	
+	-o <filename> : fichier output avec le message/fichier dechiffré ou chiffré, est requis uniquement pour chiffrer les fichier mais marche quand meme pour chiffrer les messages texte
+	
+
+
+
+
+
+
+
+
+
+CBC:
+
+Vecteur d'initialisation: Chaine aléatoire
+
+Message_Clair -> Découpé en plusieurs blocs identiques -> Chiffrement de chaque blocs
+
+Exemple: Message_chiffré
+
+1) Découper Message_chiffré en plusieurs blocs:
+	- Les blocs doivent être de tailles fixe (16 octets pour l'AES). 
+	- Si le message clair n’est pas un multiple de cette taille, on applique un remplissage (padding) pour 	compléter.
+
+
+2) Créer un Vecteur d'initialisation (IV)
+	- Le IV est une chaîne aléatoire (ou pseudo-aléatoire).
+	- Il est utilisé uniquement pour le premier bloc.
+
+	Début de la boucle
+
+3) Faire un XOR avec le vecteur d'initialisation et le texte_clair du premier bloc
+
+4) Chiffrer le résultat avec le clée secrète
+
+5) Résultat: texte_chiffré
+
+6) Le texte_chiffré constituera le vecteur d'initialisation du prochain bloc.
+
+7) Refaire depuis l'étape 3
+
+
+
+texte_clair -> 
+
+ -> divisé en x blocs ->
+
+
+
+
+
+i1:i2 = commence a l'indice i1 et termine a l'indice i2
+
+i1::i2 = commence à l'indice i1 et saute i2 éléments jusqu'a la fin
+	comme il n'y a rien entre les ::, alors il ira jusqu'a la fin
+
+
+
+[start:stop:step] =
+	- start = i : La tranche commence à l'indice i
+	- stop = None (omis) : La tranche va jusqu'à la fin de l'objet
+
+
+[start:stop:step] =
+
+	- start = i : La tranche commence à l'indice i
+	- stop = None (omis) : La tranche va jusqu'à la fin de l'objet
+	- step = i : Elle saute i éléments à chaque étape.
+
+
+
+def chiffrement_xor(message, taille_bloc, IV, secret_key):
+    message_padded = padding(message, taille_bloc)
+    blocs = divide_message(message_padded, taille_bloc)
+    IV_initial = IV.encode('utf-8')
+    key = secret_key.encode('utf-8')
+    resultat_chiffre = []
+    for un_bloc in blocs:
+        bloc_chiffre = b""
+        for j in range(len(un_bloc)):
+            xor_resultat_iv = un_bloc[j] ^ IV_initial[j]
+            xor_resultat_key = xor_resultat_iv ^ key[j]
+            bloc_chiffre += bytes([xor_resultat_key])
+        resultat_chiffre.append(bloc_chiffre)
+        IV_initial = bloc_chiffre
+    resultat_chiffre = b"".join(resultat_chiffre)
+    resultat_chiffre_b64 = base64.b64encode(resultat_chiffre)
+    return resultat_chiffre_b64
+
+
+
+
+
+
+IV = initial vecteur
+
+debut boucle range(nombre de blocs)
+	- resultat = chiffrage en xor du bloc[i]
+	- IV = resultat
+	- resultat.append(resultat)
+
+
+
+
+
+plain_text -> chiffrage avec vecteur -> chiffrage avec la clée -> resultat
+
+
+Chiffrement:
+
+Padding du message -> Divise le message en blocs de 16-> xor le premier bloc avec l'IV initial -> xor ensuite le résultat avec la clée -> xor ensuite le deuxieme bloc avec le resultat du premier -> fais une liste de blocs chiffré -> join tout les blocs entre eux -> encode le resultat en base64 pour un meilleur rendu et pouvoir envoyer le message plus facilement
+
+
+
+Dechiffrement:
+
+Decoder le message en base64 -> créer des blocs de 16 -> fais une liste de blocs chiffré -> xor le dernier bloc avec la clée -> xor le résultat avec le bloc avant lui -> si c'est le premier bloc -> xor avec la clée et ensuite le xorer avec l'IV initial -> faire une liste de bloc dans l'ordre (le premier bloc déchiffré doit etre le dernier de la liste) -> joindre les elements, retirer le padding -> résultat non chiffré
