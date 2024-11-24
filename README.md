@@ -29,10 +29,8 @@ options:
   -f FILE, --file FILE  Nom du fichier à chiffrer ou déchiffrer.
   
   -m MESSAGE, --message MESSAGE
-  
                         Message texte à chiffrer ou déchiffrer.
                         
   -o OUTPUT, --output OUTPUT
-  
                         Nom du fichier de sortie pour le résultat.
                         
