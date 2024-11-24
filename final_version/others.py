@@ -2,8 +2,8 @@ import random
 import string
 
 def GetStr(length):
-    str = string.ascii_lowercase
-    return ''.join(random.choice(str) for i in range(length))
+    characters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+    return ''.join(random.choice(characters) for i in range(length))
 
 
 def padding (message, taille_bloc):
